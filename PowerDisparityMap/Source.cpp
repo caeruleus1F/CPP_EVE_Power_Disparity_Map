@@ -44,7 +44,7 @@ Color TranslateDisparityToColor(float, float, float);
 void DrawAxisMarkings(VertexArray*, const int, const int);
 void MainWindowLoop(RenderWindow&, VertexArray*, Target*, Target*, const int, const int);
 void OutputToCSV(float**, const int, const int);
-void PurgeGrid(float**&, const int);
+void PurgeGrid(VertexArray*&, float**&, const int);
 
 int main()
 {
@@ -222,7 +222,7 @@ int main()
 	*
 	**************************************************************************/
 	//OutputToCSV(grid, t_incr, r_incr);
-	PurgeGrid(grid, t_incr);
+	PurgeGrid(map, grid, t_incr);
 }
 
 void MainWindowLoop(RenderWindow& window, VertexArray* map, Target* m, Target* t, const int t_incr, const int r_incr)
@@ -367,12 +367,14 @@ Color TranslateDisparityToColor(float disparity, float highest_disparity, float 
 	return Color::Color(red, green, blue, alpha);
 }
 
-void PurgeGrid(float**& grid, const int t_incr)
+void PurgeGrid(VertexArray*& map, float**& grid, const int t_incr)
 {
+
 	for (int i = 0; i < t_incr; ++i)
 	{
 		delete[] grid[i];
 	}
+	delete[] map;
 	delete[] grid;
 }
 
