@@ -1,3 +1,12 @@
+/******************************************************************************
+*
+*	Author: Garrett Bates
+*	IGN: Thirtyone Organism
+*	Date: October 4, 2015
+*	Program: EVE Power Disparity Map
+*
+******************************************************************************/
+
 #include <iostream>
 using std::cout;
 using std::endl;
@@ -30,9 +39,12 @@ using pdm::Hull;
 using pdm::GenericTurret;
 using pdm::GenericMissileLauncher;
 
+void CreateAndPopulateMap(VertexArray*, float**, const int, const int, float, float);
 Color TranslateDisparityToColor(float, float, float);
-void OutputToCSV(float**, int, int);
-void PurgeGrid(float**&, int);
+void DrawAxisMarkings(VertexArray*, const int, const int);
+void MainWindowLoop(RenderWindow&, VertexArray*, Target*, Target*, const int, const int);
+void OutputToCSV(float**, const int, const int);
+void PurgeGrid(float**&, const int);
 
 int main()
 {
@@ -104,6 +116,7 @@ int main()
 
 	GenericTurret vt(125.0F, 0.025625F, 18000.0F, 14400.0F, 514.0F, 1.0F);
 	Target* vexor = new Target(Hull(145.0F), &vt, "Vexor");
+
 	/* END HANGAR */
 
 	// Chooses which ships to use for myself and the target.
@@ -185,61 +198,35 @@ int main()
 	*	CREATE AND POPULATE MAP WITH COLORS DERIVED FROM DISPARITY VALUES.
 	*
 	**************************************************************************/
-
 	VertexArray* map = new VertexArray[t_incr]();
-
-	for (int i = 0; i < t_incr; ++i)
-	{
-		map[i].setPrimitiveType(Points);
-		map[i].resize(r_incr);
-
-		for (int j = 0; j < r_incr; ++j)
-		{
-			// flips the map about the x-axis so the origin is in the bottom left
-			map[i][j].position = Vector2f((float)(i), (float)r_incr - 1 - j);
-			map[i][j].color = TranslateDisparityToColor(grid[i][j], highest_disparity, lowest_disparity);
-		}
-	}
+	CreateAndPopulateMap(map, grid, t_incr, r_incr, highest_disparity, lowest_disparity);
 
 	/**************************************************************************
 	*
 	*	DRAW AXIS MARKINGS ON MAP.
 	*
 	**************************************************************************/
-	int right_marking;
-	int top_marking;
-	for (int i = 0; i < 5; ++i) 
-	{ 
-		// Y-AXIS MARKINGS
-		right_marking = r_incr - 1 - i;
-		map[i][200].color = Color::Black; 
-		map[right_marking][200].color = Color::Black;
-		map[i][400].color = Color::Black; 
-		map[right_marking][400].color = Color::Black;
-		map[i][600].color = Color::Black; 
-		map[right_marking][600].color = Color::Black;
-		map[i][800].color = Color::Black; 
-		map[right_marking][800].color = Color::Black;
-
-		// X-AXIS MARKINGS
-		top_marking = t_incr - 1 - i;
-		map[200][i].color = Color::Black;
-		map[200][top_marking].color = Color::Black;
-		map[400][i].color = Color::Black;
-		map[400][top_marking].color = Color::Black;
-		map[600][i].color = Color::Black;
-		map[600][top_marking].color = Color::Black;
-		map[800][i].color = Color::Black;
-		map[800][top_marking].color = Color::Black;
-	}
+	DrawAxisMarkings(map, t_incr, r_incr);
 
 	/**************************************************************************
 	*
 	*	MAIN WINDOW LOOP
 	*
 	**************************************************************************/
+	RenderWindow window(VideoMode(t_incr, r_incr, 32U), "Power Disparity Map"); 
+	MainWindowLoop(window, map, m, t, t_incr, r_incr);
 
-	RenderWindow window(VideoMode(t_incr, r_incr, 32U), "Power Disparity Map");
+	/**************************************************************************
+	*
+	*	CLEANUP AND OPTIONAL STORAGE
+	*
+	**************************************************************************/
+	//OutputToCSV(grid, t_incr, r_incr);
+	PurgeGrid(grid, t_incr);
+}
+
+void MainWindowLoop(RenderWindow& window, VertexArray* map, Target* m, Target* t, const int t_incr, const int r_incr)
+{
 	window.setVerticalSyncEnabled(false);
 	window.setFramerateLimit(10);
 	Image* img;
@@ -283,15 +270,52 @@ int main()
 			window.close();
 		}
 	}
+}
 
-	/**************************************************************************
-	*
-	*	CLEANUP AND OPTIONAL STORAGE
-	*
-	**************************************************************************/
+void CreateAndPopulateMap(VertexArray* map, float** grid, const int t_incr, const int r_incr, float highest_disparity, float lowest_disparity)
+{
+	for (int i = 0; i < t_incr; ++i)
+	{
+		map[i].setPrimitiveType(Points);
+		map[i].resize(r_incr);
 
-	//OutputToCSV(grid, t_incr, r_incr);
-	PurgeGrid(grid, t_incr);
+		for (int j = 0; j < r_incr; ++j)
+		{
+			// flips the map about the x-axis so the origin is in the bottom left
+			map[i][j].position = Vector2f((float)(i), (float)r_incr - 1 - j);
+			map[i][j].color = TranslateDisparityToColor(grid[i][j], highest_disparity, lowest_disparity);
+		}
+	}
+}
+
+void DrawAxisMarkings(VertexArray* map, const int t_incr, const int r_incr)
+{
+	int right_marking;
+	int top_marking;
+	for (int i = 0; i < 5; ++i)
+	{
+		// Y-AXIS MARKINGS
+		right_marking = r_incr - 1 - i;
+		map[i][200].color = Color::Black;
+		map[right_marking][200].color = Color::Black;
+		map[i][400].color = Color::Black;
+		map[right_marking][400].color = Color::Black;
+		map[i][600].color = Color::Black;
+		map[right_marking][600].color = Color::Black;
+		map[i][800].color = Color::Black;
+		map[right_marking][800].color = Color::Black;
+
+		// X-AXIS MARKINGS
+		top_marking = t_incr - 1 - i;
+		map[200][i].color = Color::Black;
+		map[200][top_marking].color = Color::Black;
+		map[400][i].color = Color::Black;
+		map[400][top_marking].color = Color::Black;
+		map[600][i].color = Color::Black;
+		map[600][top_marking].color = Color::Black;
+		map[800][i].color = Color::Black;
+		map[800][top_marking].color = Color::Black;
+	}
 }
 
 Color TranslateDisparityToColor(float disparity, float highest_disparity, float lowest_disparity)
@@ -343,7 +367,7 @@ Color TranslateDisparityToColor(float disparity, float highest_disparity, float 
 	return Color::Color(red, green, blue, alpha);
 }
 
-void PurgeGrid(float**& grid, int t_incr)
+void PurgeGrid(float**& grid, const int t_incr)
 {
 	for (int i = 0; i < t_incr; ++i)
 	{
@@ -352,7 +376,7 @@ void PurgeGrid(float**& grid, int t_incr)
 	delete[] grid;
 }
 
-void OutputToCSV(float** grid, int t_incr, int r_incr)
+void OutputToCSV(float** grid, const int t_incr, const int r_incr)
 {
 	ofstream file("data.csv");
 
