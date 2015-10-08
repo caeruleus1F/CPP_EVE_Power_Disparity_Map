@@ -2,6 +2,10 @@
 
 Dependencies: SFML 2.3.2 (2.3.1 also works)
 
+Sample images:
+http://imgur.com/ESz4rLc
+http://imgur.com/YqkbCpC
+
 EVE Online is a space-themed MMORPG. Within EVE, players can pilot over 200 ships and almost all of these ships can fit a number of combinations of hundreds of modules to choose from. Among these are weapons systems, each with their own unique characteristics.
 
 The idea behind this program is that it's not enough to attack your opponent when you are at your strongest, or when your opponent is at his weakest, because at each of those points your ability to project power may be similar to your opponent's. This can lead to an outcome where you lose, or you win - but it may not be a decisive win. The best strategy is to engage your opponent when you are strongest relative to their weakest. This way when you are victorious, both your offensive and defensive capacity are higher than they otherwise would be, allowing you to engage your next opponent in better shape. 
