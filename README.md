@@ -3,6 +3,7 @@
 Dependencies: SFML 2.3.2 (2.3.1 also works)
 
 Sample images:
+
 http://imgur.com/ESz4rLc
 
 http://imgur.com/YqkbCpC
