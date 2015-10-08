@@ -4,6 +4,7 @@ Dependencies: SFML 2.3.2 (2.3.1 also works)
 
 Sample images:
 http://imgur.com/ESz4rLc
+
 http://imgur.com/YqkbCpC
 
 EVE Online is a space-themed MMORPG. Within EVE, players can pilot over 200 ships and almost all of these ships can fit a number of combinations of hundreds of modules to choose from. Among these are weapons systems, each with their own unique characteristics.
