@@ -20,6 +20,6 @@ What this program does is determine power disparity as a function of range and t
 
 Special zones are marked within the heatmap called "crushing victory zones." These zones signify combinations of range and velocity where one ship has a power disparity that is at or above 95% of its peak for that particular engagement. For "your" ship, these zones appear gold within green; for the opponent's ship, the zone appears dark green within red. Ideally you want to be within your gold zone.
 
-X-axis on the heatmap signifies transversal velocity values from 0 to 1,000 meters per second when working with turret-based weapons systems, and velocity values from 0 to 1,000 when working with missile-based weapons systems. Y-axis value on the heatmap signify range values of 0 to 100,000 meters. Increment markings on the X-axis occur at intervals of 250 meters per second. Increment markings on the Y-axis occur at intervals of 20,000 meters.
+X-axis on the heatmap signifies transversal velocity values from 0 to 1,000 meters per second when working with turret-based weapons systems, and velocity values from 0 to 1,000 when working with missile-based weapons systems. Y-axis value on the heatmap signify range values of 0 to 100,000 meters. Increment markings on the X-axis occur at intervals of 200 meters per second. Increment markings on the Y-axis occur at intervals of 20,000 meters.
 
 While the program is active, pressing F1 generates a .jpg image with a name determined by your and the opposing ship, (eg. "Vexor vs. Autocannon Maller.jpg"). Pressing Esc closes the program.
